@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "newApp",
-    "slug": "newApp",
+    "name": "vehidex",
+    "slug": "vehidex",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./lib/assets/logo.svg",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -13,7 +13,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./lib/assets/logo.svg",
         "backgroundColor": "#ffffff"
       }
     },
