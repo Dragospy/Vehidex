@@ -1,4 +1,4 @@
-import { View, StyleSheet, TextInput, Text} from 'react-native';
+import { View, StyleSheet, TextInput, Text, Platform} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Dispatch } from 'react';
 import H1 from './Text/H1';
@@ -6,7 +6,7 @@ import H1 from './Text/H1';
 
 export default function SearchBar({setSearchString} : {setSearchString:(textContent:any)=> void} ){
     return (
-        <View style={styles.searchBarHolder}>
+      <View style={[styles.searchBarHolder, (Platform.OS == 'android')? {top: "5%"}: null]}>
           <View style = {styles.searchBarHeader}>
             <H1>Search For A Car</H1>
           </View>
@@ -32,11 +32,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-start",
     width: "85%",
-    marginBottom: "3%"
   },
   searchBarHolder:{
     alignItems: 'center',
-    top: "5%"
   },
   searchBar: {
     flexDirection: 'row',
