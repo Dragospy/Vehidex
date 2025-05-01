@@ -13,14 +13,14 @@ export default function CarCard(car: car) {
             params: { car: JSON.stringify(car) }
           })}}>
           <View style={styles.imageContainer}>
-            <Image source={{ uri: car.photo }} style={styles.carPhoto} />
+            <Image source={{ uri: car.photo }} style={styles.Photo} resizeMode="contain"/>
           </View>
-          <View style={styles.carInfo}>
-            <H3>{car.name}</H3>
-            <View style = {styles.carProperties}>
-              <P>0-60: {car.acceleration} S</P>
-              <P>BHP: {car.bhp}</P>
-              <P>Torque: {car.torque} N/M</P>
+          <View style={styles.Info}>
+            <H3 style={styles.title}>{car.name}</H3>
+            <View style = {styles.Properties}>
+              <P style = {styles.PropertiesText} >0-60: {car.acceleration} S</P>
+              <P style = {styles.PropertiesText} >BHP: {car.bhp}</P>
+              <P style = {styles.PropertiesText} >Torque: {car.torque} N/M</P>
             </View>
           </View>
           <Ionicons name="chevron-forward" size={24} color="#1E1E1E" />
@@ -35,35 +35,52 @@ export default function CarCard(car: car) {
       justifyContent: "space-between",
       alignItems: "center",
 
-      backgroundColor: '#ffffff',
+      backgroundColor: '#f8f7f7',
+
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.25,
+      shadowRadius: 2,
+      elevation: 2,
   
-      marginBottom:20,
+      width:"95%",
+      borderRadius: 12,
+      marginBottom: "5%",
+      marginTop: "1%",
   
-      width:"100%",
-  
-      height: 100,
+      height: 60,
       
       alignSelf:"center",
     },
     imageContainer:{
       justifyContent: 'center',
       alignItems: 'center',
-      height: "50%",
+      height: "100%",
       width: "30%"
     },
-    carPhoto:{
+    Photo:{
       height: "100%",
       width: "100%"
     },
-    carInfo:{
+    title:{
+      marginBottom: 5,
+    },
+    Info:{
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
+      width: "55%",
     },
-    carProperties:{
+    Properties:{
       display: "flex",
       flexDirection: "row",
       justifyContent: "space-between",
-      alignItems: "center",
+      alignItems: "flex-start",
     },
+    PropertiesText:{
+      fontFamily: "Inter",
+      fontSize: 10,
+      fontWeight: "500",
+      color: '#49454F',
+    }
   });

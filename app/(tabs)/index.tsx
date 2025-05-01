@@ -20,42 +20,69 @@ import { supabase } from '@/utils/supabase';
 
 export default function HomeScreen() {
   const [cars, setCars] = useState<car[]>([]);
-  useEffect(() => {
-    const getCars = async () => {
-      try {
-        const { data: Cars, error } = await supabase.from('cars').select();
+  const [loading, setLoading] = useState(true);
 
-        if (error) {
-          console.error('Error fetching Cars:', error.message);
-          return;
-        }
+  const getCars = async () => {
+    setLoading(true);
+    try {
+      
+      let { data: fetchedCars, error } = await supabase.from('cars').select('*')
 
-        if (Cars && Cars.length > 0) {
-          setCars(Cars);
-        }
-      } catch (error) {
-        console.error('Error fetching Cars:');
+
+      if (error) {
+        console.error('Error fetching Cars:', error.message);
+        return;
       }
-    };
 
+      console.log('Cars:', fetchedCars);
+
+      if (fetchedCars && fetchedCars.length > 0) {
+        setCars(fetchedCars.map(car => ({
+          id: car.id,
+          name: car.name,
+          photo: car.photo,
+          acceleration: car.acceleration,
+          bhp: car.bhp,
+          torque: car.torque,
+          images: [], // Add a default empty array for images
+        })));
+      }
+    } catch (error) {
+      console.error('Error fetching Cars:');
+    }
+
+    setLoading(false);
+  };
+
+  async function onRefresh(){
+    setLoading(true);
+    setSearchString("");
+    getCars();
+  }
+
+  useEffect(() => {
     getCars();
   }, []);
+
+
   const [searchString, setSearchString] = useState("");
   const displayList = cars.filter((car) => ((car.name).toLowerCase()).includes(searchString.toLowerCase()));
   return(
       <SafeAreaProvider>
         <SafeAreaView style={styles.container}>
           <SearchBar setSearchString={setSearchString}/>
-          <View style={[styles.section, (Platform.OS == 'android')? {top: "5%"}: null]}>
+          <View style={[styles.section, (Platform.OS == 'android')? {top: "10%"}: null]}>
             <SafeAreaProvider>
               <SafeAreaView style={styles.list}>
-                {displayList.length > 0 ? (
+                {displayList.length > 0  || loading? (
                   <FlatList
                     data={displayList}
                     renderItem={({item}) => 
                       <CarCard {...item}/>
                     }
                     keyExtractor={item => (item.id).toString()}
+                    onRefresh={() => onRefresh()}
+                    refreshing={loading}
                   />
                 ) : (
                   <Text style = {styles.noResults}>No Results Found</Text>
@@ -80,12 +107,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   section: {
+    top: "2%",
 
-    padding: 20,
+    padding: "2%",
 
-    flex: 1,
-
-    height: "100%",
+    flex: 1
   },
   list: {
     height: "100%",
@@ -105,3 +131,7 @@ const styles = StyleSheet.create({
     color: '#49454F',
   }
 });
+
+function onRefresh() {
+  throw new Error('Function not implemented.');
+}

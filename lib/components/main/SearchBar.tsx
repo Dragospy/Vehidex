@@ -6,7 +6,7 @@ import H1 from './Text/H1';
 
 export default function SearchBar({setSearchString} : {setSearchString:(textContent:any)=> void} ){
     return (
-      <View style={[styles.searchBarHolder, (Platform.OS == 'android')? {top: "5%"}: null]}>
+      <View style={[styles.searchBarHolder, (Platform.OS == 'android')? {top: "10%"}: null]}>
           <View style = {styles.searchBarHeader}>
             <H1>Search For A Car</H1>
           </View>
@@ -35,6 +35,8 @@ const styles = StyleSheet.create({
   },
   searchBarHolder:{
     alignItems: 'center',
+
+    top: "2%"
   },
   searchBar: {
     flexDirection: 'row',
@@ -49,6 +51,8 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 2,
     width: '90%',
+
+    marginTop: "3%"
   },
   searchBarTextContainer:{
     alignItems:"flex-start",
