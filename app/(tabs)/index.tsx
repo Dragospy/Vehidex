@@ -34,8 +34,6 @@ export default function HomeScreen() {
         return;
       }
 
-      console.log('Cars:', fetchedCars);
-
       if (fetchedCars && fetchedCars.length > 0) {
         setCars(fetchedCars.map(car => ({
           id: car.id,

@@ -8,6 +8,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import H1 from '@/lib/components/main/Text/H1';
 import P from '@/lib/components/main/Text/P';
 import H3 from '@/lib/components/main/Text/H3';
+import H2 from '@/lib/components/main/Text/H2';
 
 export default function CarDisplayScreen() {
   const [loading, setLoading] = useState(true);
@@ -16,51 +17,66 @@ export default function CarDisplayScreen() {
     car: string;
   }>();
 
-  const car = {
-    id: JSON.parse(passedCar.car).id,
-    name: JSON.parse(passedCar.car).name,
-    photo: JSON.parse(passedCar.car).photo,
-    acceleration: parseInt(JSON.parse(passedCar.car).acceleration),
-    bhp: JSON.parse(passedCar.car).bhp,
-    torque: JSON.parse(passedCar.car).torque,
-    images: JSON.parse(passedCar.car).images
-  };
+  const car = JSON.parse(passedCar.car);
+
     return (
       <SafeAreaProvider>
         <SafeAreaView style={styles.container}>
-        <View style={[styles.header, (Platform.OS == 'android')? {top: "6%"}: null]}>
-          <Pressable onPress={() => router.back()} style={{marginLeft: "5%"}}>
-            <Ionicons name="chevron-back" size={24} color="#1E1E1E" />
-          </Pressable>
-          <H1>{car?.name}</H1>
-          <View style={{width: "10%"}}></View>
-        </View>
-        <View style={styles.mainContent}>
-          <View>
-            <Image source={{ uri: car.photo }} style={[styles.mainImage, (Platform.OS == "android"? {marginTop: "15%"}: null)]} resizeMode="contain"/>
+          <View style={[styles.header, Platform.OS === 'android' && styles.headerAndroid]}>
+            <Pressable onPress={() => router.back()} style={styles.backButton}>
+              <Ionicons name="chevron-back" size={24} color="#1E1E1E" />
+            </Pressable>
+            <H1>{car?.name}</H1>
+            <View style={styles.spacer}></View>
           </View>
-          <View style={styles.column}>
-            <H1>Specifications</H1>
-            <View style={styles.row}>
-              <P>0-60: {car.acceleration} S</P>
-              <P>BHP: {car.bhp}</P>
-              <P>Torque: {car.torque} N/M</P>
+          <View style={styles.mainContent}>
+            <View>
+              <Image
+                source={{ uri: car.photo }}
+                style={[styles.mainImage, Platform.OS === "android" && styles.mainImageAndroid]}
+                resizeMode="contain"
+              />
             </View>
+            <View style={styles.column}>
+
+              <View style={[styles.row, {alignItems: "flex-start", padding: 10, flexWrap: 'wrap'}]}>
+                  <View>
+                    <View style={[styles.row, styles.rowStartAlign]}>
+                      <H2>{car.acceleration}</H2>
+                      <H3>secs</H3>
+                    </View>
+                    <P style={styles.textGray}>Acceleration 0-60</P>
+                  </View>
+                  <View>
+                    <View style={[styles.row, styles.rowStartAlign]}>
+                      <H2>{car.bhp}</H2>
+                      <H3>bhp</H3>
+                    </View>
+                    <P style={styles.textGray}>Horse Power</P>
+                  </View>
+                  <View>
+                    <View style={[styles.row, styles.rowStartAlign]}>
+                      <H2>{car.torque}</H2>
+                      <H3>N/M</H3>
+                    </View>
+                    <P style={styles.textGray}>Torque</P>
+                  </View>
+                </View>
+              </View>
+              <View style={styles.column}>
+                <H1>Images</H1>
+                <FlatList
+                  data={car.images}
+                  renderItem={({ item }) => (
+                    <Image source={{ uri: item }} style={styles.flatListImage} resizeMode="contain" />
+                  )}
+                  keyExtractor={(item, index) => index.toString()}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                />
+              </View>
           </View>
-          <View style={styles.column}>
-            <H1>Images</H1>
-            <FlatList
-              data={car.images}
-              renderItem={({ item }) => (
-                <Image source={{ uri: item }} style={{ width: 300, height: 200, borderRadius: 12 }} resizeMode="contain"/>
-              )}
-              keyExtractor={(item, index) => index.toString()}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-            />
-          </View>
-        </View>
-      </SafeAreaView>
+        </SafeAreaView>
       </SafeAreaProvider>
   );
 }
@@ -69,12 +85,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
-
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-start",
     alignItems: "center",
-
     height: "100%",
   },
   header: {
@@ -84,6 +98,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     backgroundColor: '#fff',
+  },
+  headerAndroid: {
+    top: "6%",
+  },
+  backButton: {
+    marginLeft: "5%",
+  },
+  spacer: {
+    width: "10%",
   },
   mainContent: {
     flex: 1,
@@ -97,16 +120,37 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
   },
-  column:{
+  rowStartAlign: {
+    justifyContent: "flex-start",
+    alignItems: "flex-end",
+    gap: 2,
+  },
+  column: {
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
   },
-  mainImage: { 
+  columnStartAlign: {
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    gap: 20,
+  },
+  mainImage: {
     width: "100%",
-    height: 200, 
-    borderRadius: 12
+    height: 200,
+    borderRadius: 12,
+  },
+  mainImageAndroid: {
+    marginTop: "15%",
+  },
+  textGray: {
+    color: "#777777",
+  },
+  flatListImage: {
+    width: 300,
+    height: 200,
+    borderRadius: 12,
   },
 });
