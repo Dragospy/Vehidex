@@ -1,4 +1,4 @@
-type car = {
+export type car = {
     id: number,
     name: string,
     photo: string,

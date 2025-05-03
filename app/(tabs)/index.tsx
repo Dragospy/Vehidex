@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import CarCard from '@/lib/components/main/CarCard';
 import SearchBar from '@/lib/components/main/SearchBar';
 import { supabase } from '@/utils/supabase';
+import { car } from '@/lib/types/car';
 
 /*const cars: car[]= [
   {

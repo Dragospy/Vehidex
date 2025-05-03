@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import H2 from './Text/H2';
 import P from './Text/P';
 import H3 from './Text/H3';
+import { car } from '@/lib/types/car';
 
 export default function CarCard(car: car) {
     return (
