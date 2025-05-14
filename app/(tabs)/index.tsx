@@ -1,71 +1,34 @@
 import { View, Text, StyleSheet, ScrollView, Image, Pressable, FlatList, TextInput, SafeAreaView, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { useEffect, useState } from 'react';
-import CarCard from '@/lib/components/main/CarCard';
-import SearchBar from '@/lib/components/main/SearchBar';
+import { useContext, useEffect, useState } from 'react';
+import CarCard from '@/lib/components/CarCard';
+import SearchBar from '@/lib/components/SearchBar';
 import { supabase } from '@/utils/supabase';
-import { car } from '@/lib/types/car';
-
-/*const cars: car[]= [
-  {
-    id: "adada",
-    name: 'KFC',
-    photo: 'https://banner2.cleanpng.com/20181001/bqb/kisspng-colonel-sanders-kfc-fried-chicken-restaurant-kfc-clipart-lebanon-tripoli-free-clipart-on-dumi-1713928125086.webp',
-    acceleration: 50,
-    bhp: 50,
-    torque: 50,
-  },
-];*/
+import { vehicle } from '@/lib/types/vehicle';
+import { useVehiclesContext } from '@/lib/contextHandlers/vehicles';
 
 
 export default function HomeScreen() {
-  const [cars, setCars] = useState<car[]>([]);
-  const [loading, setLoading] = useState(true);
+  const vehiclesContext = useVehiclesContext();
+  
+  if (!vehiclesContext) {
+    throw new Error("useVehiclesContext must be used within a VehiclesProvider");
+  }
 
-  const getCars = async () => {
-    setLoading(true);
-    try {
-      
-      let { data: fetchedCars, error } = await supabase.from('cars').select('*')
-
-
-      if (error) {
-        console.error('Error fetching Cars:', error.message);
-        return;
-      }
-
-      if (fetchedCars && fetchedCars.length > 0) {
-        setCars(fetchedCars.map(car => ({
-          id: car.id,
-          name: car.name,
-          photo: car.photo,
-          acceleration: car.acceleration,
-          bhp: car.bhp,
-          torque: car.torque,
-          images: [], // Add a default empty array for images
-        })));
-      }
-    } catch (error) {
-      console.error('Error fetching Cars:');
-    }
-
-    setLoading(false);
-  };
+  const { vehicles, refreshVehicles } = vehiclesContext;
+  const [loading, setLoading] = useState(false);
 
   async function onRefresh(){
     setLoading(true);
     setSearchString("");
-    getCars();
+    refreshVehicles();
+    setLoading(false);
   }
-
-  useEffect(() => {
-    getCars();
-  }, []);
 
 
   const [searchString, setSearchString] = useState("");
-  const displayList = cars.filter((car) => ((car.name).toLowerCase()).includes(searchString.toLowerCase()));
+  const displayList = vehicles?.filter((vehicle) => ((vehicle.name).toLowerCase()).includes(searchString.toLowerCase())) || [];
   return(
       <SafeAreaProvider>
         <SafeAreaView style={styles.container}>
@@ -131,6 +94,3 @@ const styles = StyleSheet.create({
   }
 });
 
-function onRefresh() {
-  throw new Error('Function not implemented.');
-}

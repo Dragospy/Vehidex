@@ -1,27 +1,27 @@
-import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
+import { View, StyleSheet, Image, Pressable } from 'react-native';
 import { router} from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import H2 from './Text/H2';
-import P from './Text/P';
+import { vehicle } from '@/lib/types/vehicle';
 import H3 from './Text/H3';
-import { car } from '@/lib/types/car';
+import P from './Text/P';
 
-export default function CarCard(car: car) {
+
+export default function CarCard(vehicle: vehicle) {
     return (
-        <Pressable key={car.id} style={styles.carCard} onPress={() => {
+        <Pressable key={vehicle.id} style={styles.carCard} onPress={() => {
           router.push({
             pathname: '/(tabs)/carDisplay',
-            params: { car: JSON.stringify(car) }
+            params: { vehicle: JSON.stringify(vehicle) }
           })}}>
           <View style={styles.imageContainer}>
-            <Image source={{ uri: car.photo }} style={styles.Photo} resizeMode="contain"/>
+            <Image source={{ uri: vehicle.photo }} style={styles.Photo} resizeMode="contain"/>
           </View>
           <View style={styles.Info}>
-            <H3 style={styles.title}>{car.name}</H3>
+            <H3 style={styles.title}>{vehicle.name}</H3>
             <View style = {styles.Properties}>
-              <P style = {styles.PropertiesText} >0-60: {car.acceleration} S</P>
-              <P style = {styles.PropertiesText} >BHP: {car.bhp}</P>
-              <P style = {styles.PropertiesText} >Torque: {car.torque} N/M</P>
+              <P style = {styles.PropertiesText} >0-60: {vehicle.acceleration} S</P>
+              <P style = {styles.PropertiesText} >BHP: {vehicle.bhp}</P>
+              <P style = {styles.PropertiesText} >Torque: {vehicle.torque} N/M</P>
             </View>
           </View>
           <Ionicons name="chevron-forward" size={24} color="#1E1E1E" />
